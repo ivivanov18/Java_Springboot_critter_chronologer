@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,10 +27,9 @@ public class PetController {
 
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
-        Customer customer = customerService.getOne(petDTO.getOwnerId());
         Pet pet = convertPetDTOToEntity(petDTO);
-        pet.setCustomer(customer);
         petService.addPet(pet, petDTO.getOwnerId());
+        //TODO: fix passed id
         return petDTO;
     }
 
@@ -40,7 +40,12 @@ public class PetController {
 
     @GetMapping
     public List<PetDTO> getPets(){
-        throw new UnsupportedOperationException();
+        List<Pet> pets = petService.getAllPets();
+        List<PetDTO> dtos = new ArrayList<>();
+        for (Pet pet: pets) {
+            dtos.add(convertEntityToPetDTO(pet));
+        }
+        return dtos;
     }
 
     @GetMapping("/owner/{ownerId}")
@@ -51,6 +56,7 @@ public class PetController {
     private static PetDTO convertEntityToPetDTO(Pet pet) {
         PetDTO dto = new PetDTO();
         BeanUtils.copyProperties(pet, dto);
+        dto.setOwnerId(pet.getCustomer().getId());
         return dto;
     }
 
