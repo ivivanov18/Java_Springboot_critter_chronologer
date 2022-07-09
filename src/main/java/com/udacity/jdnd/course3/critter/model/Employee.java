@@ -1,30 +1,33 @@
 package com.udacity.jdnd.course3.critter.model;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-public class Employee extends ServiceUser {
-    @OneToMany
-    private List<Skill> skills;
+public class Employee extends User {
+    @ElementCollection
+    @JoinTable(name="employee_skills")
+    private Set<EmployeeSkill> skills;
 
-    @OneToMany
-    private List<Day> daysAvailable;
+    @ElementCollection
+    @JoinTable(name="employee_days")
+    private Set<DayOfWeek> daysAvailable;
 
-    public List<Skill> getSkills() {
+    public Set<EmployeeSkill> getSkills() {
         return skills;
     }
 
-    public void setSkills(List<Skill> skills) {
+    public void setSkills(Set<EmployeeSkill> skills) {
         this.skills = skills;
     }
 
-    public List<Day> getDaysAvailable() {
+    public Set<DayOfWeek> getDaysAvailable() {
         return daysAvailable;
     }
 
-    public void setDaysAvailable(List<Day> daysAvailable) {
+    public void setDaysAvailable(Set<DayOfWeek> daysAvailable) {
         this.daysAvailable = daysAvailable;
     }
 }

@@ -1,11 +1,13 @@
 package com.udacity.jdnd.course3.critter.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
-public class Customer extends ServiceUser {
+public class Customer extends User {
     @Column(name="phone_number")
+    @NotNull
     private String phoneNumber;
     private String notes;
 

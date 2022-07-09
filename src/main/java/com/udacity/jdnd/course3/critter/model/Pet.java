@@ -17,7 +17,8 @@ public class Pet {
     @Type(type="nstring")
     private String name;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="customer_id")
     private Customer customer;
 
     private LocalDate birthDate;
