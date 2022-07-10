@@ -34,4 +34,8 @@ public class EmployeeService {
         employee.setDaysAvailable(daysAvailable);
         employeeRepository.save(employee);
     }
+
+    public List<Employee> findAllById(List<Long> employeeIds) {
+        return employeeRepository.findAllById(employeeIds);
+    }
 }
