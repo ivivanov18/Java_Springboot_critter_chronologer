@@ -1,8 +1,6 @@
 package com.udacity.jdnd.course3.critter.service;
 
-import com.udacity.jdnd.course3.critter.model.Pet;
-import com.udacity.jdnd.course3.critter.model.Schedule;
-import com.udacity.jdnd.course3.critter.model.ScheduleDTO;
+import com.udacity.jdnd.course3.critter.model.*;
 import com.udacity.jdnd.course3.critter.repository.ScheduleRepository;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,12 @@ public class ScheduleService {
     @Autowired
     PetService petService;
 
+    @Autowired
+    CustomerService customerService;
+
+    @Autowired
+    EmployeeService employeeService;
+
     public void save(Schedule schedule) {
         scheduleRepository.save(schedule);
     }
@@ -30,5 +34,17 @@ public class ScheduleService {
         Pet pet = petService.getOne(petId);
 
         return scheduleRepository.getAllByPetsContains(pet);
+    }
+
+    public List<Schedule> findScheduleByEmployeeId(long employeeId) {
+        Employee employee = employeeService.findById(employeeId);
+
+        return scheduleRepository.getAllByEmployeesContains(employee);
+    }
+
+    public List<Schedule> findScheduleByCustomerId(long customerId) {
+        Customer customer = customerService.getOne(customerId);
+
+        return scheduleRepository.getAllByPetsIn(customer.getPets());
     }
 }
