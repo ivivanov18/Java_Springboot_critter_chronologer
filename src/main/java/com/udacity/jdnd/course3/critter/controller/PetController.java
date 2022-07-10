@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.controller;
 
+import com.udacity.jdnd.course3.critter.api.PetNotFoundException;
 import com.udacity.jdnd.course3.critter.model.Customer;
 import com.udacity.jdnd.course3.critter.model.Pet;
 import com.udacity.jdnd.course3.critter.model.PetDTO;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Pets.
@@ -22,9 +24,6 @@ public class PetController {
     @Autowired
     PetService petService;
 
-    @Autowired
-    CustomerService customerService;
-
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
         Pet pet = convertPetDTOToEntity(petDTO);
@@ -35,7 +34,11 @@ public class PetController {
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        Pet pet = petService.getOne(petId);
+        if (pet == null) {
+            throw new PetNotFoundException(petId);
+        }
+        return convertEntityToPetDTO(pet);
     }
 
     @GetMapping
@@ -50,7 +53,8 @@ public class PetController {
 
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
-        throw new UnsupportedOperationException();
+        List<Pet> pets = petService.getPetsByOwner(ownerId);
+        return pets.stream().map(PetController::convertEntityToPetDTO).collect(Collectors.toList());
     }
 
     private static PetDTO convertEntityToPetDTO(Pet pet) {

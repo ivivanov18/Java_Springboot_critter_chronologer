@@ -1,8 +1,8 @@
 package com.udacity.jdnd.course3.critter.service;
 
+import com.udacity.jdnd.course3.critter.api.CustomerNotFoundException;
 import com.udacity.jdnd.course3.critter.model.Customer;
 import com.udacity.jdnd.course3.critter.model.Pet;
-import com.udacity.jdnd.course3.critter.model.PetDTO;
 import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,9 @@ public class PetService {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    CustomerRepository customerRepository;
+
     public Pet addPet(Pet pet, Long ownerId) {
         Customer owner = customerService.getOne(ownerId);
         pet.setCustomer(owner);
@@ -27,5 +30,17 @@ public class PetService {
 
     public List<Pet> getAllPets() {
         return petRepository.findAll();
+    }
+
+    public Pet getOne(long petId) {
+        return petRepository.getOne(petId);
+    }
+
+    public List<Pet> getPetsByOwner(long ownerId) {
+        Customer customer = customerService.getOne(ownerId);
+        if (customer == null) {
+            throw new CustomerNotFoundException(ownerId);
+        }
+        return customer.getPets();
     }
 }
