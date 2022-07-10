@@ -1,6 +1,5 @@
 package com.udacity.jdnd.course3.critter.controller;
 
-import com.udacity.jdnd.course3.critter.api.EmployeeNotFoundException;
 import com.udacity.jdnd.course3.critter.model.*;
 import com.udacity.jdnd.course3.critter.service.CustomerService;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
@@ -47,7 +46,8 @@ public class UserController {
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        throw new UnsupportedOperationException();
+        Customer customer = customerService.getOwnerByPetId(petId);
+        return convertEntityToCustomerDTO(customer);
     }
 
     @PostMapping("/employee")
