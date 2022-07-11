@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class Pet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private PetType type;
@@ -17,8 +17,8 @@ public class Pet {
     @Type(type="nstring")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="customer_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="customer_id", nullable=false)
     private Customer customer;
 
     private LocalDate birthDate;
