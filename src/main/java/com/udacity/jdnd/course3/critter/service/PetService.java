@@ -23,9 +23,10 @@ public class PetService {
 
     public Pet addPet(Pet pet, Long ownerId) {
         Customer owner = customerService.getOne(ownerId);
+        owner.getPets().add(pet);
+        customerService.addCustomer(owner);
         pet.setCustomer(owner);
-        petRepository.save(pet);
-        return pet;
+        return petRepository.save(pet);
     }
 
     public List<Pet> getAllPets() {

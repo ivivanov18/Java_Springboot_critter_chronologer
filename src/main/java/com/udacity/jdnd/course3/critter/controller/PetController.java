@@ -26,10 +26,9 @@ public class PetController {
 
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
-        Pet pet = convertPetDTOToEntity(petDTO);
-        petService.addPet(pet, petDTO.getOwnerId());
-        //TODO: fix passed id
-        return petDTO;
+        Pet petToBeCreated = convertPetDTOToEntity(petDTO);
+        Pet petCreated = petService.addPet(petToBeCreated, petDTO.getOwnerId());
+        return convertEntityToPetDTO(petCreated);
     }
 
     @GetMapping("/{petId}")
@@ -60,7 +59,9 @@ public class PetController {
     private static PetDTO convertEntityToPetDTO(Pet pet) {
         PetDTO dto = new PetDTO();
         BeanUtils.copyProperties(pet, dto);
-        dto.setOwnerId(pet.getCustomer().getId());
+        if (pet.getCustomer() != null) {
+            dto.setOwnerId(pet.getCustomer().getId());
+        }
         return dto;
     }
 
