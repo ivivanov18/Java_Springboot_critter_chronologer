@@ -28,13 +28,12 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Customer addCustomer(Customer customer) {
+    public Customer save(Customer customer) {
         return customerRepository.save(customer);
     }
 
     public Customer getOne(Long id) {
-//        return customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
-        return customerRepository.getOne(id);
+        return customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
     public Customer getOwnerByPetId(long petId) {

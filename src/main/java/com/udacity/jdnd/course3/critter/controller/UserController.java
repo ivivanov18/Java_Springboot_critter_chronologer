@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.controller;
 import com.udacity.jdnd.course3.critter.model.*;
 import com.udacity.jdnd.course3.critter.service.CustomerService;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
+import com.udacity.jdnd.course3.critter.service.PetService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +32,22 @@ public class UserController {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    PetService petService;
+
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        Customer customer = customerService.addCustomer(convertCustomerDTOToEntity(customerDTO));
-        return convertEntityToCustomerDTO(customer);
+        // fix from forum https://knowledge.udacity.com/questions/332924
+        List<Long> petIds = customerDTO.getPetIds();
+        List<Pet> pets = new ArrayList<>();
+        if (petIds != null) {
+            for (Long petId: petIds) {
+                pets.add(petService.getOne(petId));
+            }
+        }
+        Customer customer = convertCustomerDTOToEntity(customerDTO);
+        Customer savedCustomer = customerService.save(customer);
+        return convertEntityToCustomerDTO(savedCustomer);
     }
 
     @GetMapping("/customer")
@@ -83,6 +96,10 @@ public class UserController {
     private static CustomerDTO convertEntityToCustomerDTO(Customer customer) {
         CustomerDTO dto = new CustomerDTO();
         BeanUtils.copyProperties(customer, dto);
+        // fix from forum https://knowledge.udacity.com/questions/332924
+        if (customer.getPets() != null) {
+            dto.setPetIds(customer.getPets().stream().map(p -> p.getId()).collect(Collectors.toList()));
+        }
         return dto;
     }
 
