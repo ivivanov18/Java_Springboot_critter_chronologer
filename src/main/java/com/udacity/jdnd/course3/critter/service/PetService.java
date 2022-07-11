@@ -20,15 +20,17 @@ public class PetService {
     @Autowired
     CustomerService customerService;
 
-    @Autowired
-    CustomerRepository customerRepository;
-
     public Pet addPet(Pet pet, Long ownerId) {
         Customer owner = customerService.getOne(ownerId);
-        owner.getPets().add(pet);
-        customerService.addCustomer(owner);
         pet.setCustomer(owner);
-        return petRepository.save(pet);
+        Pet savedPet = petRepository.save(pet);
+
+        List<Pet> pets = owner.getPets();
+        pets.add(pet);
+        owner.setPets(pets);
+        customerService.save(owner);
+
+        return savedPet;
     }
 
     public List<Pet> getAllPets() {
@@ -40,11 +42,8 @@ public class PetService {
     }
 
     public List<Pet> getPetsByOwner(long ownerId) {
-        Customer customer = customerService.getOne(ownerId);
-        if (customer == null) {
-            throw new CustomerNotFoundException(ownerId);
-        }
-        return customer.getPets();
+        // fix from forum https://knowledge.udacity.com/questions/332924
+        return petRepository.getPetsByCustomer_Id(ownerId);
     }
 
     public List<Pet> findAllById(List<Long> petIds) {
