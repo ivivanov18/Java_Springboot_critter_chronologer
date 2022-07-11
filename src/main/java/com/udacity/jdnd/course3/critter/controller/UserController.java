@@ -11,6 +11,7 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Users.
@@ -69,7 +70,12 @@ public class UserController {
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        List<Employee> employees = employeeService
+                                        .getAllEmployeesWithSkillsAvailableOnDate(
+                                                employeeDTO.getSkills(),
+                                                employeeDTO.getDate()
+                                        );
+        return employees.stream().map(UserController::convertEntityToEmployeeDTO).collect(Collectors.toList());
     }
 
     private static CustomerDTO convertEntityToCustomerDTO(Customer customer) {

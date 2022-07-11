@@ -4,13 +4,16 @@ import com.udacity.jdnd.course3.critter.api.CustomerNotFoundException;
 import com.udacity.jdnd.course3.critter.api.EmployeeNotFoundException;
 import com.udacity.jdnd.course3.critter.model.Employee;
 import com.udacity.jdnd.course3.critter.model.EmployeeDTO;
+import com.udacity.jdnd.course3.critter.model.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -37,5 +40,13 @@ public class EmployeeService {
 
     public List<Employee> findAllById(List<Long> employeeIds) {
         return employeeRepository.findAllById(employeeIds);
+    }
+
+    public List<Employee> getAllEmployeesWithSkillsAvailableOnDate(Set<EmployeeSkill> skills, LocalDate date) {
+        return employeeRepository
+                .findAllByDaysAvailableContaining(date.getDayOfWeek())
+                .stream()
+                .filter(e -> e.getSkills().containsAll(skills))
+                .collect(Collectors.toList());
     }
 }
