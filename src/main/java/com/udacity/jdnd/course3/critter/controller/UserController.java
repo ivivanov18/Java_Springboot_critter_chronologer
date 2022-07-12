@@ -45,6 +45,7 @@ public class UserController {
             }
         }
         Customer customer = convertCustomerDTOToEntity(customerDTO);
+        customer.setPets(pets);
         Customer savedCustomer = customerService.save(customer);
         return convertEntityToCustomerDTO(savedCustomer);
     }
