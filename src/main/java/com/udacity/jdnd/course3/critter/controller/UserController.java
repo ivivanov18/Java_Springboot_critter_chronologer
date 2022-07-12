@@ -37,7 +37,6 @@ public class UserController {
 
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        // fix from forum https://knowledge.udacity.com/questions/332924
         List<Long> petIds = customerDTO.getPetIds();
         List<Pet> pets = new ArrayList<>();
         if (petIds != null) {
@@ -96,9 +95,8 @@ public class UserController {
     private static CustomerDTO convertEntityToCustomerDTO(Customer customer) {
         CustomerDTO dto = new CustomerDTO();
         BeanUtils.copyProperties(customer, dto);
-        // fix from forum https://knowledge.udacity.com/questions/332924
         if (customer.getPets() != null) {
-            dto.setPetIds(customer.getPets().stream().map(p -> p.getId()).collect(Collectors.toList()));
+            dto.setPetIds(customer.getPets().stream().map(Pet::getId).collect(Collectors.toList()));
         }
         return dto;
     }

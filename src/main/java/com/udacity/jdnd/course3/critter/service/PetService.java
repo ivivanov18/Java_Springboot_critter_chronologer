@@ -1,9 +1,7 @@
 package com.udacity.jdnd.course3.critter.service;
 
-import com.udacity.jdnd.course3.critter.api.CustomerNotFoundException;
 import com.udacity.jdnd.course3.critter.model.Customer;
 import com.udacity.jdnd.course3.critter.model.Pet;
-import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,7 @@ public class PetService {
         Pet savedPet = petRepository.save(pet);
 
         List<Pet> pets = owner.getPets();
-        pets.add(pet);
+        pets.add(savedPet);
         owner.setPets(pets);
         customerService.save(owner);
 
@@ -42,7 +40,6 @@ public class PetService {
     }
 
     public List<Pet> getPetsByOwner(long ownerId) {
-        // fix from forum https://knowledge.udacity.com/questions/332924
         return petRepository.getPetsByCustomer_Id(ownerId);
     }
 

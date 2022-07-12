@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,24 +13,16 @@ public class Schedule {
     private long id;
 
     @ManyToMany
-    @ElementCollection
-    @JoinTable(
-            name="schedule_employee",
-            joinColumns = @JoinColumn(name="schedule_id"),
-            inverseJoinColumns = @JoinColumn(name="employee_id"))
+
     private List<Employee> employees;
 
     @ManyToMany
-    @ElementCollection
-    @JoinTable(
-            name="schedule_pet",
-            joinColumns = @JoinColumn(name="schedule_id"),
-            inverseJoinColumns = @JoinColumn(name="pet_id"))
+
     private List<Pet> pets;
 
     @ElementCollection
     @JoinTable(name="schedule_activities")
-    private Set<EmployeeSkill> activities;
+    private Set<EmployeeSkill> activities = new HashSet<>();
 
     private LocalDate date;
 
