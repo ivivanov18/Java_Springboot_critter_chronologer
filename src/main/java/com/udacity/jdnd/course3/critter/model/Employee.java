@@ -2,7 +2,6 @@ package com.udacity.jdnd.course3.critter.model;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
-import java.util.List;
 import java.util.Set;
 
 @Entity

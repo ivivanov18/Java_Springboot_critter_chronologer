@@ -1,9 +1,7 @@
 package com.udacity.jdnd.course3.critter.service;
 
-import com.udacity.jdnd.course3.critter.api.CustomerNotFoundException;
 import com.udacity.jdnd.course3.critter.api.EmployeeNotFoundException;
 import com.udacity.jdnd.course3.critter.model.Employee;
-import com.udacity.jdnd.course3.critter.model.EmployeeDTO;
 import com.udacity.jdnd.course3.critter.model.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
