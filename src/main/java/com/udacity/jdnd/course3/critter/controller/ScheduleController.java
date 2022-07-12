@@ -4,8 +4,6 @@ import com.udacity.jdnd.course3.critter.model.Employee;
 import com.udacity.jdnd.course3.critter.model.Pet;
 import com.udacity.jdnd.course3.critter.model.Schedule;
 import com.udacity.jdnd.course3.critter.model.ScheduleDTO;
-import com.udacity.jdnd.course3.critter.repository.ScheduleRepository;
-import com.udacity.jdnd.course3.critter.service.CustomerService;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
 import com.udacity.jdnd.course3.critter.service.PetService;
 import com.udacity.jdnd.course3.critter.service.ScheduleService;
@@ -85,8 +83,8 @@ public class ScheduleController {
 
     private static ScheduleDTO convertEntityToScheduleDto(Schedule schedule) {
         ScheduleDTO dto = new ScheduleDTO();
-        List<Long> employeeIds = schedule.getEmployees().stream().map(e -> e.getId()).collect(Collectors.toList());
-        List<Long> petIds = schedule.getPets().stream().map(e -> e.getId()).collect(Collectors.toList());
+        List<Long> employeeIds = schedule.getEmployees().stream().map(Employee::getId).collect(Collectors.toList());
+        List<Long> petIds = schedule.getPets().stream().map(Pet::getId).collect(Collectors.toList());
         dto.setEmployeeIds(employeeIds);
         dto.setPetIds(petIds);
         BeanUtils.copyProperties(schedule, dto);

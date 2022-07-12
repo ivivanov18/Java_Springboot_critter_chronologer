@@ -19,9 +19,6 @@ public class CustomerService {
     CustomerRepository customerRepository;
 
     @Autowired
-    PetService petService;
-
-    @Autowired
     PetRepository petRepository;
 
     public List<Customer> getAllCustomers() {
